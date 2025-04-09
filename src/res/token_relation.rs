@@ -34,7 +34,7 @@ pub trait TokenRelationTrait {
         false
     }
     // maybe
-    fn add_automatically_to_lexer() -> bool {
+    fn add_tokens_automatically_to_lexer() -> bool {
         true
     }
 }
@@ -107,11 +107,18 @@ impl TokenRelationResult {
 //     Any, // any is for a case like, [start,word,word,word,finish]-this qualifies as a sentece, and word can be anything.
 //          // to be more precise: [Start, <ANYTHING IN BEtWEEN>, Finish]-we are supposed to recognize this as Start to finish, so we need any in this case
 // }
-pub struct FillerToken;
+pub struct FillerToken {
+    set_tokens: Option<Vec<Token>>,
+    set_amount: Option<usize>,
+}
 impl FillerToken {
-    pub fn from(vec: Vec<Token>, set_amount: Option<usize>) -> Self {
+    pub fn from(set_tokens: Option<Vec<Token>>, set_amount: Option<usize>) -> Token {
         // ehhh?
-        todo!()
+        // TODO finish this, set_tokens.and_then(|f| {f.iter()})
+        Self {
+            set_tokens,
+            set_amount,
+        };
     }
 }
 impl TokenTrait for FillerToken {

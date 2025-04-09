@@ -59,6 +59,7 @@ pub struct Token {
     suffix: Option<String>,
     // do not put str/input in here, Token is A CELL, not an actuall use struct
 }
+pub enum TokenType {}
 impl Token {
     pub fn case_sensetive(&self) -> bool {
         self.case_sensetive
@@ -125,4 +126,97 @@ impl TokenResult {
 pub struct TokenFillters {
     // TODO
     case_sensetive: bool,
+}
+impl Default for Token {
+    fn default() -> Self {
+        Self {
+            identifiers: Default::default(),
+            name: Default::default(),
+            case_sensetive: Default::default(),
+            prefix: Default::default(),
+            suffix: Default::default(),
+        }
+    }
+}
+
+// experimental
+pub struct TokenBuilder {
+    identifiers: Vec<String>,
+    name: String,
+    case_sensetive: bool,
+    prefix: Option<String>,
+    suffix: Option<String>,
+}
+impl TokenBuilder {
+    pub fn identifiers_set(mut self, identifiers: Vec<String>) -> Self {
+        self.identifiers = identifiers;
+        self
+    }
+    pub fn identifiers_add(mut self, mut identifiers: Vec<String>) -> Self {
+        self.identifiers.append(&mut identifiers);
+        self
+    }
+    pub fn name_set(mut self, name: String) -> Self {
+        self.name = name;
+        self
+    }
+
+    pub fn case_sensetive_set(mut self, case_sensetive: bool) -> Self {
+        self.case_sensetive = case_sensetive;
+        self
+    }
+
+    pub fn prefix_set(mut self, prefix: Option<String>) -> Self {
+        self.prefix = prefix;
+        self
+    }
+
+    pub fn suffix_set(mut self, suffix: Option<String>) -> Self {
+        self.suffix = suffix;
+        self
+    }
+
+    pub fn identifiers_get(&self) -> &Vec<String> {
+        &self.identifiers
+    }
+
+    pub fn name_get(&self) -> &String {
+        &self.name
+    }
+
+    pub fn case_sensetive_get(&self) -> bool {
+        self.case_sensetive
+    }
+
+    pub fn prefix_get(&self) -> &Option<String> {
+        &self.prefix
+    }
+
+    pub fn suffix_get(&self) -> &Option<String> {
+        &self.suffix
+    }
+
+    pub fn build(&self) -> Token {
+        Token {
+            identifiers: self.identifiers.clone(),
+            name: self.name.clone(),
+            case_sensetive: self.case_sensetive,
+            prefix: self.prefix.clone(),
+            suffix: self.suffix.clone(),
+        }
+    }
+    pub fn new() -> TokenBuilder {
+        TokenBuilder::from(Token::default())
+    }
+}
+impl From<Token> for TokenBuilder {
+    fn from(value: Token) -> Self {
+        Self {
+            case_sensetive: value.case_sensetive,
+            identifiers: value.identifiers,
+            name: value.name,
+            prefix: value.prefix,
+            suffix: value.suffix,
+        }
+    }
 }

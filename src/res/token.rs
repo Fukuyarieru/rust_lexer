@@ -25,13 +25,20 @@ pub trait TokenTrait {
     // }
     fn case_sensetive() -> bool;
     fn as_token() -> Token {
-        Token {
-            identifiers: Self::identifiers(),
-            name: Self::name(),
-            case_sensetive: Self::case_sensetive(),
-            prefix: Self::prefix(),
-            suffix: Self::suffix(),
-        }
+        // Token {
+        //     identifiers: Self::identifiers(),
+        //     name: Self::name(),
+        //     case_sensetive: Self::case_sensetive(),
+        //     prefix: Self::prefix(),
+        //     suffix: Self::suffix(),
+        // }
+        TokenBuilder::new()
+            .identifiers_set(Self::identifiers())
+            .name_set(Self::name())
+            .case_sensetive_set(Self::case_sensetive())
+            .prefix_set(Self::prefix())
+            .suffix_set(Self::suffix())
+            .build()
     }
     // fn as_token_dyn(&self) -> Token {
     //     Self::as_token()
@@ -57,9 +64,21 @@ pub struct Token {
     case_sensetive: bool,
     prefix: Option<String>,
     suffix: Option<String>,
-    // do not put str/input in here, Token is A CELL, not an actuall use struct
+    token_type: TokenType, // do not put str/input in here, Token is A CELL, not an actuall use struct
 }
-pub enum TokenType {}
+#[derive(Clone, Debug)]
+pub enum TokenType {
+    Normal,
+    Filler {
+        set_amount: Option<usize>,
+        set_tokesn: Option<Vec<Token>>,
+    },
+}
+impl Default for TokenType {
+    fn default() -> Self {
+        TokenType::Normal
+    }
+}
 impl Token {
     pub fn case_sensetive(&self) -> bool {
         self.case_sensetive
@@ -92,13 +111,10 @@ impl Token {
         }
     }
     pub fn new(identifiers: Vec<String>, name: String) -> Self {
-        Token {
-            identifiers,
-            name,
-            case_sensetive: false,
-            prefix: None,
-            suffix: None,
-        }
+        TokenBuilder::new()
+            .identifiers_set(identifiers)
+            .name_set(name)
+            .build()
     }
 }
 
@@ -135,17 +151,20 @@ impl Default for Token {
             case_sensetive: Default::default(),
             prefix: Default::default(),
             suffix: Default::default(),
+            token_type: TokenType::default(),
         }
     }
 }
 
 // experimental
+
 pub struct TokenBuilder {
     identifiers: Vec<String>,
     name: String,
     case_sensetive: bool,
     prefix: Option<String>,
     suffix: Option<String>,
+    token_type: TokenType,
 }
 impl TokenBuilder {
     pub fn identifiers_set(mut self, identifiers: Vec<String>) -> Self {
@@ -203,6 +222,7 @@ impl TokenBuilder {
             case_sensetive: self.case_sensetive,
             prefix: self.prefix.clone(),
             suffix: self.suffix.clone(),
+            token_type: self.token_type.clone(),
         }
     }
     pub fn new() -> TokenBuilder {
@@ -217,6 +237,8 @@ impl From<Token> for TokenBuilder {
             name: value.name,
             prefix: value.prefix,
             suffix: value.suffix,
+            // :\
+            token_type: value.token_type,
         }
     }
 }

@@ -31,7 +31,7 @@ fn main() {
 
     lexer.add_relation(VariableDeclaration::as_relation());
     lexer.add_relation(VariableModification::as_relation());
-    lexer.add_relation(TokenRelation::new(vec![a.clone()], false, "A".to_string()));
+    // lexer.add_relation(TokenRelation::new(vec![a.clone()], false, "A".to_string()));
 
     // lexer.print_detail();
 

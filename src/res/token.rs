@@ -1,6 +1,6 @@
 // use super::lexer::UnknownToken;
 
-use crate::FillerToken;
+// use crate::FillerToken;
 
 pub trait TokenTrait {
     // Note: Do not add lifetimes
@@ -48,13 +48,13 @@ pub trait TokenTrait {
     fn suffix() -> Option<String>;
     // fn get_str(&self) -> String;
     // fn token_result(&self) -> TokenResult {};
-    fn as_filler_token() -> FillerToken
-    where
-        Self: From<Token>,
-    {
-        // FillerToken::Specific(vec![]);
-        todo!()
-    }
+    // fn as_filler_token() -> FillerToken
+    // where
+    //     Self: From<Token>,
+    // {
+    //     // FillerToken::Specific(vec![]);
+    //     todo!()
+    // }
 }
 
 #[derive(Clone, Debug, PartialEq)]
@@ -64,7 +64,7 @@ pub struct Token {
     case_sensetive: bool,
     prefix: Option<String>,
     suffix: Option<String>,
-    token_type: TokenType, // do not put str/input in here, Token is A CELL, not an actuall use struct
+    // token_type: TokenType, // do not put str/input in here, Token is A CELL, not an actuall use struct
 }
 #[derive(Clone, Debug)]
 pub enum TokenType {
@@ -151,7 +151,7 @@ impl Default for Token {
             case_sensetive: Default::default(),
             prefix: Default::default(),
             suffix: Default::default(),
-            token_type: TokenType::default(),
+            // token_type: TokenType::default(),
         }
     }
 }
@@ -164,7 +164,7 @@ pub struct TokenBuilder {
     case_sensetive: bool,
     prefix: Option<String>,
     suffix: Option<String>,
-    token_type: TokenType,
+    // token_type: TokenType,
 }
 impl TokenBuilder {
     pub fn identifiers_set(mut self, identifiers: Vec<String>) -> Self {
@@ -222,7 +222,7 @@ impl TokenBuilder {
             case_sensetive: self.case_sensetive,
             prefix: self.prefix.clone(),
             suffix: self.suffix.clone(),
-            token_type: self.token_type.clone(),
+            // token_type: self.token_type.clone(),
         }
     }
     pub fn new() -> TokenBuilder {
@@ -238,7 +238,7 @@ impl From<Token> for TokenBuilder {
             prefix: value.prefix,
             suffix: value.suffix,
             // :\
-            token_type: value.token_type,
+            // token_type: value.token_type,
         }
     }
 }

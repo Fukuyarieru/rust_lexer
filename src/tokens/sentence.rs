@@ -1,4 +1,8 @@
-use crate::res::token_relation::{FillerToken, TokenRelationTrait};
+use crate::res::{
+    lexer::UnknownToken,
+    token::TokenTrait,
+    token_relation::{RelationToken, TokenRelationTrait},
+};
 
 pub struct Sentence;
 impl TokenRelationTrait for Sentence {
@@ -6,8 +10,15 @@ impl TokenRelationTrait for Sentence {
         true
     }
 
-    fn tokens() -> Vec<crate::res::token::Token> {
-        vec![FillerToken::from(None, Some(3))]
+    fn relation() -> Vec<RelationToken> {
+        vec![
+            RelationToken::Normal(UnknownToken::as_token()),
+            RelationToken::Advanced {
+                set_amount: None,
+                set_tokens: None,
+            },
+            RelationToken::Normal(UnknownToken::as_token()),
+        ]
     }
 
     fn name() -> String {

@@ -7,12 +7,12 @@ impl TokenRelationTrait for VariableDeclaration {
     fn ordered() -> bool {
         true
     }
-    fn tokens() -> Vec<Token> {
+    fn relation() -> Vec<RelationToken> {
         vec![
-            Type::as_token(),
+            RelationToken::Normal(Type::as_token()),
             // Variable::as_token(),
-            UnknownToken::as_token(),
-            Semicolom::as_token(),
+            RelationToken::Normal(UnknownToken::as_token()),
+            RelationToken::Normal(Semicolom::as_token()),
         ]
     }
     fn name() -> String {
@@ -27,14 +27,11 @@ impl TokenRelationTrait for VariableModification {
     fn name() -> String {
         "Variable Modification".to_string()
     }
-    fn tokens() -> Vec<Token> {
+    fn relation() -> Vec<RelationToken> {
         vec![
-            UnknownToken::as_token(),
-            EqualiSign::as_token(),
-            UnknownToken::as_token(),
-            // Variable::as_token(),
-            // EqualiSign::as_token(),
-            // Variable::as_token(),
+            RelationToken::Normal(UnknownToken::as_token()),
+            RelationToken::Normal(EqualiSign::as_token()),
+            RelationToken::Normal(UnknownToken::as_token()),
         ]
     }
 }

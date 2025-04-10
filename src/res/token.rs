@@ -2,6 +2,8 @@
 
 // use crate::FillerToken;
 
+use super::token_relation::RelationToken;
+
 pub trait TokenTrait {
     // Note: Do not add lifetimes
     fn identifiers() -> Vec<String>;
@@ -17,21 +19,8 @@ pub trait TokenTrait {
                 .contains(&str.to_lowercase())
         }
     }
-    // fn from_unknown() -> UnknownToken {
-    //     UnknownToken::from(Self::as_token())
-    // }
-    // fn from_token(token: impl TokenTrait) -> Self {
-    //     token::as_token()
-    // }
     fn case_sensetive() -> bool;
     fn as_token() -> Token {
-        // Token {
-        //     identifiers: Self::identifiers(),
-        //     name: Self::name(),
-        //     case_sensetive: Self::case_sensetive(),
-        //     prefix: Self::prefix(),
-        //     suffix: Self::suffix(),
-        // }
         TokenBuilder::new()
             .identifiers_set(Self::identifiers())
             .name_set(Self::name())
@@ -40,24 +29,16 @@ pub trait TokenTrait {
             .suffix_set(Self::suffix())
             .build()
     }
-    // fn as_token_dyn(&self) -> Token {
-    //     Self::as_token()
-    // }
     fn can_be_filler() -> bool;
     fn prefix() -> Option<String>;
     fn suffix() -> Option<String>;
-    // fn get_str(&self) -> String;
     // fn token_result(&self) -> TokenResult {};
-    // fn as_filler_token() -> FillerToken
-    // where
-    //     Self: From<Token>,
-    // {
-    //     // FillerToken::Specific(vec![]);
-    //     todo!()
-    // }
+    fn as_relation_token() -> RelationToken {
+        RelationToken::Normal(Self::as_token())
+    }
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Default)]
 pub struct Token {
     identifiers: Vec<String>,
     name: String,
@@ -65,19 +46,6 @@ pub struct Token {
     prefix: Option<String>,
     suffix: Option<String>,
     // token_type: TokenType, // do not put str/input in here, Token is A CELL, not an actuall use struct
-}
-#[derive(Clone, Debug)]
-pub enum TokenType {
-    Normal,
-    Filler {
-        set_amount: Option<usize>,
-        set_tokesn: Option<Vec<Token>>,
-    },
-}
-impl Default for TokenType {
-    fn default() -> Self {
-        TokenType::Normal
-    }
 }
 impl Token {
     pub fn case_sensetive(&self) -> bool {
@@ -142,18 +110,6 @@ impl TokenResult {
 pub struct TokenFillters {
     // TODO
     case_sensetive: bool,
-}
-impl Default for Token {
-    fn default() -> Self {
-        Self {
-            identifiers: Default::default(),
-            name: Default::default(),
-            case_sensetive: Default::default(),
-            prefix: Default::default(),
-            suffix: Default::default(),
-            // token_type: TokenType::default(),
-        }
-    }
 }
 
 // experimental
@@ -237,8 +193,6 @@ impl From<Token> for TokenBuilder {
             name: value.name,
             prefix: value.prefix,
             suffix: value.suffix,
-            // :\
-            // token_type: value.token_type,
         }
     }
 }

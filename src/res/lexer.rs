@@ -5,7 +5,7 @@ use crate::res::token::*;
 use crate::res::token_relation::*;
 
 // To use lexer, either
-// make a struct of your own implement the TokenTrait, and add by lexer.add_token(YourStruct::as_token())
+// make a struct of your own and implement the TokenTrait, add to lexer with lexer.add_token(YourStruct::as_token())
 // or else, you could use the Token struct directly to create custom, without assosiactions to your build
 pub struct Lexer {
     pub string: String,
@@ -116,6 +116,7 @@ impl Lexer {
         results
     }
     pub fn print_detail(&self) {
+        println!();
         println!("===== Printing Lexer Detail =====");
         println!("String:\n{}", self.string);
         println!("Identifiers: {:?}", self.identifiers());

@@ -14,6 +14,10 @@ use std::io::{Read, stdin};
 
 fn main() {
     let mut stdin = stdin().lock();
+
+    // let a = tokenize!("BBBBBBB");
+    // println!("{:?}", a);
+
     // =================================
 
     let mut lexer = Lexer::new();
@@ -41,30 +45,6 @@ fn main() {
     lexer.string = str;
 
     lexer.print_detail();
-
-    // println!("{:?}", lexer.interpret_tokens_results());
-
-    // =================================
-
-    let relation0 = 0;
-
-    // let relations1 = TokenRelation::new(
-    //     vec![
-    //         Type::as_token(),
-    //         UnknownToken::as_token(),
-    //         UnknownToken::as_token(),
-    //     ],
-    //     true,
-    // );
-
-    // let relation2 = TokenRelation::new(
-    //     vec![
-    //         Animal::as_token(),
-    //         FillerToken::as_token(), // specific?
-    //         Animal::as_token(),
-    //     ],
-    //     true,
-    // );
 }
 
 pub struct Animal {

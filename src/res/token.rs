@@ -196,3 +196,16 @@ impl From<Token> for TokenBuilder {
         }
     }
 }
+
+#[macro_export]
+macro_rules! tokenize {
+    ($name:expr) => {{
+        let token = TokenBuilder::new();
+        let name = String::from($name);
+        token
+            .name_set(name.clone())
+            .identifiers_set(vec![name.clone()])
+            .case_sensetive_set(true)
+            .build()
+    }};
+}

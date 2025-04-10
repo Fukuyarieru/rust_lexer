@@ -22,11 +22,11 @@ pub trait TokenTrait {
     fn case_sensetive() -> bool;
     fn as_token() -> Token {
         TokenBuilder::new()
-            .identifiers_set(Self::identifiers())
-            .name_set(Self::name())
-            .case_sensetive_set(Self::case_sensetive())
-            .prefix_set(Self::prefix())
-            .suffix_set(Self::suffix())
+            .identifiers(Self::identifiers())
+            .name(Self::name())
+            .case_sensetive(Self::case_sensetive())
+            .prefix(Self::prefix())
+            .suffix(Self::suffix())
             .build()
     }
     fn can_be_filler() -> bool;
@@ -80,8 +80,8 @@ impl Token {
     }
     pub fn new(identifiers: Vec<String>, name: String) -> Self {
         TokenBuilder::new()
-            .identifiers_set(identifiers)
-            .name_set(name)
+            .identifiers(identifiers)
+            .name(name)
             .build()
     }
 }
@@ -123,7 +123,7 @@ pub struct TokenBuilder {
     // token_type: TokenType,
 }
 impl TokenBuilder {
-    pub fn identifiers_set(mut self, identifiers: Vec<String>) -> Self {
+    pub fn identifiers(mut self, identifiers: Vec<String>) -> Self {
         self.identifiers = identifiers;
         self
     }
@@ -131,46 +131,22 @@ impl TokenBuilder {
         self.identifiers.append(&mut identifiers);
         self
     }
-    pub fn name_set(mut self, name: String) -> Self {
+    pub fn name(mut self, name: String) -> Self {
         self.name = name;
         self
     }
-
-    pub fn case_sensetive_set(mut self, case_sensetive: bool) -> Self {
+    pub fn case_sensetive(mut self, case_sensetive: bool) -> Self {
         self.case_sensetive = case_sensetive;
         self
     }
-
-    pub fn prefix_set(mut self, prefix: Option<String>) -> Self {
+    pub fn prefix(mut self, prefix: Option<String>) -> Self {
         self.prefix = prefix;
         self
     }
-
-    pub fn suffix_set(mut self, suffix: Option<String>) -> Self {
+    pub fn suffix(mut self, suffix: Option<String>) -> Self {
         self.suffix = suffix;
         self
     }
-
-    pub fn identifiers_get(&self) -> &Vec<String> {
-        &self.identifiers
-    }
-
-    pub fn name_get(&self) -> &String {
-        &self.name
-    }
-
-    pub fn case_sensetive_get(&self) -> bool {
-        self.case_sensetive
-    }
-
-    pub fn prefix_get(&self) -> &Option<String> {
-        &self.prefix
-    }
-
-    pub fn suffix_get(&self) -> &Option<String> {
-        &self.suffix
-    }
-
     pub fn build(&self) -> Token {
         Token {
             identifiers: self.identifiers.clone(),

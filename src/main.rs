@@ -15,12 +15,15 @@ use std::io::{Read, stdin};
 fn main() {
     let mut stdin = stdin().lock();
 
-    // let a = tokenize!("BBBBBBB");
-    // println!("{:?}", a);
+    let a = tokenize!("BBBBBBB");
+    println!("{:?}", a);
 
     // =================================
 
     let mut lexer = Lexer::new();
+
+    // lexer.check("a b c d e f g".to_string());
+    // println!("{:?}", lexer.tokenize());
 
     // lexer.string = "Hello, World. int char bool a cat".to_string();
 

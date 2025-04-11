@@ -4,6 +4,8 @@ use std::ops::Deref;
 use crate::res::token::*;
 use crate::res::token_relation::*;
 
+use super::undefined_token::UndefinedToken;
+
 // To use lexer, either
 // make a struct of your own and implement the TokenTrait, add to lexer with lexer.add_token(YourStruct::as_token())
 // or else, you could use the Token struct directly to create custom, without assosiactions to your build
@@ -13,6 +15,12 @@ pub struct Lexer {
     relations: Vec<TokenRelation>,
 }
 impl Lexer {
+    pub fn tokenize(&self) -> Vec<UndefinedToken> {
+        self.string
+            .split_whitespace()
+            .map(|f| UndefinedToken::new(f.to_string()))
+            .collect()
+    }
     pub fn new() -> Self {
         Self {
             string: "".to_string(),
@@ -25,6 +33,38 @@ impl Lexer {
         self.interpret_tokens_results()
     }
     pub fn interpret_tokens_results(&self) -> Vec<TokenResult> {
+        // let a = self.tokenize().iter().map(|un_tk| {
+        //     self.tokens().iter().find(|f| {
+        //         f.check(&un_tk.str)
+        //             .then_some(f)
+        //             .or_else(|| Some(UnknownToken::as_token()))
+        //             .is_some()
+        //     })
+        // });
+
+        // let a: Vec<String> = self
+        //     .tokenize()
+        //     .iter()
+        //     .map(|un_tk| un_tk.str.clone())
+        //     .collect();
+        self.tokenize().iter().map(|f| {
+            let a = 1;
+            let mut ans: Vec<TokenResult> = Vec::new();
+            for tk in self.tokens() {
+                tk.check(f.str())
+                    .then(|| ans.push(TokenResult::new(ans.push(tk.clone()), f.str())))
+                    .or_else(|| {
+                        Some(ans.push(TokenResult::new(UnknownToken::as_token(), f.str())))
+                    });
+            }
+        });
+        // a.iter().for_each(|str| {
+        //     self.tokens()
+        //         .iter()
+        //         .find(|tk| tk.check(str))
+        //         .map(|a| TokenResult::new(a.clone(), str.deref().to_string()));
+        // });
+
         let mut result = Vec::new();
         let mut checked = false;
         self.string.replace(" ", "\n").lines().for_each(|str| {

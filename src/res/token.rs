@@ -2,13 +2,13 @@
 
 // use crate::FillerToken;
 
-use super::token_relation::RelationToken;
+use super::{token_relation::RelationToken, undefined_token::UndefinedToken};
 
 pub trait TokenTrait {
     // Note: Do not add lifetimes
     fn identifiers() -> Vec<String>;
     fn name() -> String;
-    fn check(&self, str: &str) -> bool {
+    fn check(str: &str) -> bool {
         if Self::case_sensetive() {
             Self::identifiers().contains(&str.to_string())
         } else {
@@ -36,6 +36,9 @@ pub trait TokenTrait {
     fn as_relation_token() -> RelationToken {
         RelationToken::Normal(Self::as_token())
     }
+    // fn interpret(underfined_token: UndefinedToken) -> Option<Token> {
+    //     Self::check(&underfined_token.str).then_some(Self::as_token())
+    // }
 }
 
 #[derive(Clone, Debug, PartialEq, Default)]
@@ -78,6 +81,9 @@ impl Token {
                 .contains(&str.to_lowercase())
         }
     }
+    // fn interpret(&self, underfined_token: UndefinedToken) -> Option<Token> {
+    //     self.check(&underfined_token.str).then_some(self.clone())
+    // }
     pub fn new(identifiers: Vec<String>, name: String) -> Self {
         TokenBuilder::new()
             .identifiers(identifiers)
@@ -179,9 +185,9 @@ macro_rules! tokenize {
         let token = TokenBuilder::new();
         let name = String::from($name);
         token
-            .name_set(name.clone())
-            .identifiers_set(vec![name.clone()])
-            .case_sensetive_set(true)
+            .name(name.clone())
+            .identifiers(vec![name.clone()])
+            .case_sensetive(true)
             .build()
     }};
 }

@@ -47,17 +47,56 @@ impl Lexer {
         //     .iter()
         //     .map(|un_tk| un_tk.str.clone())
         //     .collect();
-        self.tokenize().iter().map(|f| {
+        let mut ans: Vec<TokenResult> = Vec::new();
+        self.tokenize().iter().for_each(|f| {
             let a = 1;
-            let mut ans: Vec<TokenResult> = Vec::new();
             for tk in self.tokens() {
-                tk.check(f.str())
-                    .then(|| ans.push(TokenResult::new(ans.push(tk.clone()), f.str())))
-                    .or_else(|| {
-                        Some(ans.push(TokenResult::new(UnknownToken::as_token(), f.str())))
-                    });
+                if tk.check(f.str()) {
+                    ans.push(TokenResult::new(tk, f.str().to_string()));
+                } else {
+                    ans.push(TokenResult::new(
+                        UnknownToken::as_token(),
+                        f.str().to_string(),
+                    ));
+                }
             }
         });
+        // ans
+
+        self.tokenize()
+            .iter()
+            .map(|undefined_token| {
+                self.tokens()
+                    .clone()
+                    .iter()
+                    .find(|token| token.check(undefined_token.str()))
+                    .map(|token| TokenResult::new(token.clone(), undefined_token.str().to_string()))
+                    .unwrap_or_else(|| {
+                        TokenResult::new(
+                            UnknownToken::as_token(),
+                            undefined_token.str().to_string(),
+                        )
+                    })
+                // .and_then(|token| {
+                //     Some(TokenResult::new(
+                //         token.clone(),
+                //         undefined_token.str().to_string(),
+                //     ))
+                //     .or_else(|| {
+                //         Some(TokenResult::new(
+                //             UnknownToken::as_token(),
+                //             undefined_token.str().to_string(),
+                //         ))
+                //     })
+                // })
+                // if let Some(token) = res {
+                //     TokenResult::new(token.clone(), undefined_token.str().to_string())
+                // } else {
+                //     TokenResult::new(UnknownToken::as_token(), undefined_token.str().to_string())
+                // }
+                // TokenResult::new(UnknownToken::as_token(), "a".to_string())
+            })
+            .collect()
         // a.iter().for_each(|str| {
         //     self.tokens()
         //         .iter()
@@ -65,21 +104,21 @@ impl Lexer {
         //         .map(|a| TokenResult::new(a.clone(), str.deref().to_string()));
         // });
 
-        let mut result = Vec::new();
-        let mut checked = false;
-        self.string.replace(" ", "\n").lines().for_each(|str| {
-            self.tokens.iter().for_each(|token| {
-                if token.check(str) {
-                    result.push(TokenResult::new(token.clone(), str.to_string()));
-                    checked = true;
-                }
-            });
-            if !checked {
-                result.push(TokenResult::new(UnknownToken::as_token(), str.to_string()));
-            }
-            checked = false;
-        });
-        result
+        // let mut result = Vec::new();
+        // let mut checked = false;
+        // self.string.replace(" ", "\n").lines().for_each(|str| {
+        //     self.tokens.iter().for_each(|token| {
+        //         if token.check(str) {
+        //             result.push(TokenResult::new(token.clone(), str.to_string()));
+        //             checked = true;
+        //         }
+        //     });
+        //     if !checked {
+        //         result.push(TokenResult::new(UnknownToken::as_token(), str.to_string()));
+        //     }
+        //     checked = false;
+        // });
+        // result
     }
     pub fn interpret_tokens(&self) -> Vec<Token> {
         self.interpret_tokens_results()

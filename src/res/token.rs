@@ -2,11 +2,13 @@
 
 // use crate::FillerToken;
 
-use super::{token_relation::RelationToken, undefined_token::UndefinedToken};
+use std::sync::Arc;
+
+use super::token_relation::RelationToken;
 
 pub trait TokenTrait {
     // Note: Do not add lifetimes
-    fn identifiers() -> Vec<String>;
+    fn identifiers() -> Arc<[String]>;
     fn name() -> String;
     fn check(str: &str) -> bool {
         if Self::case_sensetive() {
@@ -43,7 +45,7 @@ pub trait TokenTrait {
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct Token {
-    identifiers: Vec<String>,
+    identifiers: Arc<[String]>,
     name: String,
     case_sensetive: bool,
     prefix: Option<String>,
@@ -55,7 +57,7 @@ impl Token {
         self.case_sensetive
     }
 
-    pub fn identifiers(&self) -> Vec<String> {
+    pub fn identifiers(&self) -> Arc<[String]> {
         self.identifiers.clone()
     }
 
@@ -84,7 +86,7 @@ impl Token {
     // fn interpret(&self, underfined_token: UndefinedToken) -> Option<Token> {
     //     self.check(&underfined_token.str).then_some(self.clone())
     // }
-    pub fn new(identifiers: Vec<String>, name: String) -> Self {
+    pub fn new(identifiers: Arc<[String]>, name: String) -> Self {
         TokenBuilder::new()
             .identifiers(identifiers)
             .name(name)
@@ -121,7 +123,7 @@ pub struct TokenFillters {
 // experimental
 
 pub struct TokenBuilder {
-    identifiers: Vec<String>,
+    identifiers: Arc<[String]>,
     name: String,
     case_sensetive: bool,
     prefix: Option<String>,
@@ -129,14 +131,14 @@ pub struct TokenBuilder {
     // token_type: TokenType,
 }
 impl TokenBuilder {
-    pub fn identifiers(mut self, identifiers: Vec<String>) -> Self {
+    pub fn identifiers(mut self, identifiers: Arc<[String]>) -> Self {
         self.identifiers = identifiers;
         self
     }
-    pub fn identifiers_add(mut self, mut identifiers: Vec<String>) -> Self {
-        self.identifiers.append(&mut identifiers);
-        self
-    }
+    // pub fn identifiers_add(mut self, mut identifiers: Vec<String>) -> Self {
+    //     self.identifiers.append(&mut identifiers);
+    //     self
+    // }
     pub fn name(mut self, name: String) -> Self {
         self.name = name;
         self
@@ -189,5 +191,17 @@ macro_rules! tokenize {
             .identifiers(vec![name.clone()])
             .case_sensetive(true)
             .build()
+    }};
+}
+
+#[macro_export]
+macro_rules! arc {
+    ($($x:expr),*) => {{
+        let mut vec = Vec::new();
+        $(
+            vec.push($x);
+        )*
+        let vec=vec;
+        std::sync::Arc::new(vec.as_slice())
     }};
 }

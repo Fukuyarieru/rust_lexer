@@ -15,12 +15,19 @@ use std::io::{Read, stdin};
 fn main() {
     let mut stdin = stdin().lock();
 
-    let a = tokenize!("BBBBBBB");
-    println!("{:?}", a);
+    // let a = tokenize!("BBBBBBB");
+    // println!("{:?}", a);
 
     // =================================
+    let a = arc!("Dog".to_string());
 
     let mut lexer = Lexer::new();
+
+    // lexer.add_token(Type::as_token());
+
+    // lexer.string = "int b ;".to_string();
+    // lexer.print_detail();
+    // println!("{:?}", lexer.interpret_tokens());
 
     // lexer.check("a b c d e f g".to_string());
     // println!("{:?}", lexer.tokenize());
@@ -59,7 +66,6 @@ impl TokenTrait for Animal {
     }
 
     fn name() -> String {
-        let a = "a";
         "Animal".to_string()
     }
 

@@ -102,6 +102,7 @@ impl Lexer {
                 if token_index + relation_len < tokens.len() {
                     // relation checks appropriate tokens
                     if relation.check(&tokens[token_index..token_index + relation_len]) {
+                        // TODO, here is a problem
                         let str = tokens_results[token_index..token_index + relation_len]
                             .iter()
                             .map(|f| f.str())

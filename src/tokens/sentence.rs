@@ -1,7 +1,12 @@
-use crate::res::{
-    lexer::UnknownToken,
-    token::TokenTrait,
-    token_relation::{RelationToken, TokenRelationTrait},
+use std::sync::Arc;
+
+use crate::{
+    arc,
+    res::{
+        lexer::UnknownToken,
+        token::TokenTrait,
+        token_relation::{RelationToken, TokenRelationTrait},
+    },
 };
 
 pub struct Sentence;
@@ -10,18 +15,18 @@ impl TokenRelationTrait for Sentence {
         true
     }
 
-    fn relation() -> Vec<RelationToken> {
-        vec![
+    fn relation() -> Arc<[RelationToken]> {
+        arc![
             RelationToken::Normal(UnknownToken::as_token()),
             RelationToken::Advanced {
                 set_amount: None,
                 set_tokens: None,
             },
-            RelationToken::Normal(UnknownToken::as_token()),
+            RelationToken::Normal(UnknownToken::as_token())
         ]
     }
 
-    fn name() -> String {
-        todo!()
+    fn name() -> &'static str {
+        "Sentence"
     }
 }

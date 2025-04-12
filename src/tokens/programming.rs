@@ -10,16 +10,16 @@ impl TokenRelationTrait for VariableDeclaration {
     fn ordered() -> bool {
         true
     }
-    fn relation() -> Vec<RelationToken> {
-        vec![
+    fn relation() -> Arc<[RelationToken]> {
+        arc![
             RelationToken::Normal(Type::as_token()),
             // Variable::as_token(),
             RelationToken::Normal(UnknownToken::as_token()),
-            RelationToken::Normal(Semicolom::as_token()),
+            RelationToken::Normal(Semicolom::as_token())
         ]
     }
-    fn name() -> String {
-        "Variable Declaration".to_string()
+    fn name() -> &'static str {
+        "Variable Declaration"
     }
 }
 pub struct VariableModification {}
@@ -27,15 +27,15 @@ impl TokenRelationTrait for VariableModification {
     fn ordered() -> bool {
         true
     }
-    fn name() -> String {
-        "Variable Modification".to_string()
+    fn name() -> &'static str {
+        "Variable Modification"
     }
-    fn relation() -> Vec<RelationToken> {
-        vec![
+    fn relation() -> Arc<[RelationToken]> {
+        arc!(
             RelationToken::Normal(UnknownToken::as_token()),
             RelationToken::Normal(EqualiSign::as_token()),
-            RelationToken::Normal(UnknownToken::as_token()),
-        ]
+            RelationToken::Normal(UnknownToken::as_token())
+        )
     }
 }
 pub struct EqualiSign {}

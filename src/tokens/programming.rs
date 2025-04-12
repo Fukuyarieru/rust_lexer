@@ -32,9 +32,16 @@ impl TokenRelationTrait for VariableModification {
     }
     fn relation() -> Arc<[RelationToken]> {
         arc!(
-            RelationToken::Normal(UnknownToken::as_token()),
+            // RelationToken::Normal(UnknownToken::as_token()),
+            RelationToken::Advanced {
+                set_amount: Some(1),
+                set_tokens: None
+            },
             RelationToken::Normal(EqualiSign::as_token()),
-            RelationToken::Normal(UnknownToken::as_token())
+            RelationToken::Advanced {
+                set_amount: Some(1),
+                set_tokens: None
+            }
         )
     }
 }

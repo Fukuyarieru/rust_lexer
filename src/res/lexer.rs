@@ -1,6 +1,7 @@
 #![allow(clippy::collapsible_if)]
 use std::sync::Arc;
 
+use crate::arc;
 use crate::res::token::*;
 use crate::res::token_relation::*;
 
@@ -164,7 +165,7 @@ pub struct UnknownToken {
 }
 impl TokenTrait for UnknownToken {
     fn identifiers() -> Arc<[&'static str]> {
-        Arc::new([])
+        arc!()
     }
     fn name() -> &'static str {
         "Unknown Token"

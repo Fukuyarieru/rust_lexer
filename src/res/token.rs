@@ -31,7 +31,6 @@ pub trait TokenTrait {
             .suffix(Self::suffix())
             .build()
     }
-    fn can_be_filler() -> bool;
     fn prefix() -> Option<&'static str>;
     fn suffix() -> Option<&'static str>;
     // fn token_result(&self) -> TokenResult {};

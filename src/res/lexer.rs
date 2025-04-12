@@ -179,9 +179,6 @@ impl TokenTrait for UnknownToken {
     fn suffix() -> Option<&'static str> {
         None
     }
-    fn can_be_filler() -> bool {
-        true
-    }
 }
 impl UnknownToken {
     pub fn get_str(&self) -> String {

@@ -1,6 +1,7 @@
 #![allow(unused_variables)]
 #![allow(dead_code)]
 
+mod example;
 mod res;
 mod tokens;
 
@@ -80,11 +81,5 @@ impl TokenTrait for Animal {
 
     fn suffix() -> Option<&'static str> {
         None
-    }
-    // fn care_about_body() -> bool {
-    //     todo!()
-    // }
-    fn can_be_filler() -> bool {
-        true
     }
 }

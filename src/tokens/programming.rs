@@ -66,10 +66,6 @@ impl TokenTrait for EqualiSign {
     fn suffix() -> Option<&'static str> {
         None
     }
-
-    fn can_be_filler() -> bool {
-        false
-    }
 }
 
 pub struct Semicolom {}
@@ -93,10 +89,6 @@ impl TokenTrait for Semicolom {
     fn suffix() -> Option<&'static str> {
         None
     }
-
-    fn can_be_filler() -> bool {
-        false
-    }
 }
 pub struct Variable {}
 impl TokenTrait for Variable {
@@ -119,10 +111,6 @@ impl TokenTrait for Variable {
     fn suffix() -> Option<&'static str> {
         None
     }
-
-    fn can_be_filler() -> bool {
-        false
-    }
 }
 pub struct Type {}
 impl TokenTrait for Type {
@@ -140,8 +128,5 @@ impl TokenTrait for Type {
     }
     fn suffix() -> Option<&'static str> {
         None
-    }
-    fn can_be_filler() -> bool {
-        false
     }
 }

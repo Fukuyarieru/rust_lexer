@@ -1,4 +1,4 @@
-use std::ops::Not;
+use std::{ops::Not, sync::Arc};
 
 // use crate::res::lexer::*;
 use crate::res::token::*;
@@ -9,8 +9,8 @@ pub trait TokenRelationTrait {
         TokenRelation::new(Self::relation(), Self::ordered(), Self::name())
     }
     fn ordered() -> bool;
-    fn relation() -> Vec<RelationToken>;
-    fn name() -> String;
+    fn relation() -> Arc<[RelationToken]>;
+    fn name() -> &'static str;
     fn check(tokens: &[Token]) -> bool {
         if tokens.len() != Self::relation().len() {
             return false;
@@ -42,22 +42,22 @@ pub trait TokenRelationTrait {
 }
 #[derive(Clone, Debug)]
 pub struct TokenRelation {
-    relation: Vec<RelationToken>,
+    relation: Arc<[RelationToken]>,
     ordered: bool,
-    name: String,
+    name: &'static str,
 }
 impl TokenRelation {
-    pub fn new(tokens: Vec<RelationToken>, ordered: bool, name: String) -> Self {
+    pub fn new(tokens: Arc<[RelationToken]>, ordered: bool, name: &'static str) -> Self {
         Self {
             relation: tokens,
             ordered,
             name,
         }
     }
-    pub fn name(&self) -> String {
+    pub fn name(&self) -> &'static str {
         self.name.clone()
     }
-    pub fn relation(&self) -> Vec<RelationToken> {
+    pub fn relation(&self) -> Arc<[RelationToken]> {
         self.relation.clone()
     }
     pub fn ordered(&self) -> bool {
@@ -76,7 +76,7 @@ impl TokenRelation {
             let mut tokens_copy = tokens.to_vec();
             // let mut check_copy = self.relation.clone();
 
-            for relation_token in &self.relation {
+            for relation_token in &self.relation.to_vec() {
                 if let Some(index) = tokens_copy
                     .iter()
                     .position(|t| relation_token.check_token(t))

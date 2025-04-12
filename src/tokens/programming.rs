@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use crate::arc;
 use crate::res::lexer::*;
 use crate::res::token::*;
 use crate::res::token_relation::*;
@@ -37,23 +40,23 @@ impl TokenRelationTrait for VariableModification {
 }
 pub struct EqualiSign {}
 impl TokenTrait for EqualiSign {
-    fn identifiers() -> Vec<String> {
-        vec!["=".to_string()]
+    fn identifiers() -> Arc<[&'static str]> {
+        arc!["="]
     }
 
-    fn name() -> String {
-        "Equal Sign".to_string()
+    fn name() -> &'static str {
+        "Equal Sign"
     }
 
     fn case_sensetive() -> bool {
         false
     }
 
-    fn prefix() -> Option<String> {
+    fn prefix() -> Option<&'static str> {
         None
     }
 
-    fn suffix() -> Option<String> {
+    fn suffix() -> Option<&'static str> {
         None
     }
 
@@ -64,23 +67,23 @@ impl TokenTrait for EqualiSign {
 
 pub struct Semicolom {}
 impl TokenTrait for Semicolom {
-    fn identifiers() -> Vec<String> {
-        vec![";".to_string()]
+    fn identifiers() -> Arc<[&'static str]> {
+        arc!(";")
     }
 
-    fn name() -> String {
-        "Semicolom".to_string()
+    fn name() -> &'static str {
+        "Semicolom"
     }
 
     fn case_sensetive() -> bool {
         false
     }
 
-    fn prefix() -> Option<String> {
+    fn prefix() -> Option<&'static str> {
         None
     }
 
-    fn suffix() -> Option<String> {
+    fn suffix() -> Option<&'static str> {
         None
     }
 
@@ -90,23 +93,23 @@ impl TokenTrait for Semicolom {
 }
 pub struct Variable {}
 impl TokenTrait for Variable {
-    fn identifiers() -> Vec<String> {
+    fn identifiers() -> Arc<[&'static str]> {
         UnknownToken::identifiers() // aaa
     }
 
-    fn name() -> String {
-        "Variable".to_string()
+    fn name() -> &'static str {
+        "Variable"
     }
 
     fn case_sensetive() -> bool {
         false
     }
 
-    fn prefix() -> Option<String> {
+    fn prefix() -> Option<&'static str> {
         None
     }
 
-    fn suffix() -> Option<String> {
+    fn suffix() -> Option<&'static str> {
         None
     }
 
@@ -116,23 +119,19 @@ impl TokenTrait for Variable {
 }
 pub struct Type {}
 impl TokenTrait for Type {
-    fn identifiers() -> Vec<String> {
-        vec![
-            String::from("int"),
-            String::from("char"),
-            String::from("bool"),
-        ]
+    fn identifiers() -> Arc<[&'static str]> {
+        arc!("char", "int", "bool")
     }
-    fn name() -> String {
-        "Type".to_string()
+    fn name() -> &'static str {
+        "Type"
     }
     fn case_sensetive() -> bool {
         false
     }
-    fn prefix() -> Option<String> {
+    fn prefix() -> Option<&'static str> {
         None
     }
-    fn suffix() -> Option<String> {
+    fn suffix() -> Option<&'static str> {
         None
     }
     fn can_be_filler() -> bool {

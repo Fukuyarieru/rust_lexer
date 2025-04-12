@@ -1,5 +1,5 @@
 #![allow(clippy::collapsible_if)]
-use std::ops::Deref;
+use std::sync::Arc;
 
 use crate::res::token::*;
 use crate::res::token_relation::*;
@@ -33,36 +33,6 @@ impl Lexer {
         self.interpret_tokens_results()
     }
     pub fn interpret_tokens_results(&self) -> Vec<TokenResult> {
-        // let a = self.tokenize().iter().map(|un_tk| {
-        //     self.tokens().iter().find(|f| {
-        //         f.check(&un_tk.str)
-        //             .then_some(f)
-        //             .or_else(|| Some(UnknownToken::as_token()))
-        //             .is_some()
-        //     })
-        // });
-
-        // let a: Vec<String> = self
-        //     .tokenize()
-        //     .iter()
-        //     .map(|un_tk| un_tk.str.clone())
-        //     .collect();
-        let mut ans: Vec<TokenResult> = Vec::new();
-        self.tokenize().iter().for_each(|f| {
-            let a = 1;
-            for tk in self.tokens() {
-                if tk.check(f.str()) {
-                    ans.push(TokenResult::new(tk, f.str().to_string()));
-                } else {
-                    ans.push(TokenResult::new(
-                        UnknownToken::as_token(),
-                        f.str().to_string(),
-                    ));
-                }
-            }
-        });
-        // ans
-
         self.tokenize()
             .iter()
             .map(|undefined_token| {
@@ -77,32 +47,8 @@ impl Lexer {
                             undefined_token.str().to_string(),
                         )
                     })
-                // .and_then(|token| {
-                //     Some(TokenResult::new(
-                //         token.clone(),
-                //         undefined_token.str().to_string(),
-                //     ))
-                //     .or_else(|| {
-                //         Some(TokenResult::new(
-                //             UnknownToken::as_token(),
-                //             undefined_token.str().to_string(),
-                //         ))
-                //     })
-                // })
-                // if let Some(token) = res {
-                //     TokenResult::new(token.clone(), undefined_token.str().to_string())
-                // } else {
-                //     TokenResult::new(UnknownToken::as_token(), undefined_token.str().to_string())
-                // }
-                // TokenResult::new(UnknownToken::as_token(), "a".to_string())
             })
             .collect()
-        // a.iter().for_each(|str| {
-        //     self.tokens()
-        //         .iter()
-        //         .find(|tk| tk.check(str))
-        //         .map(|a| TokenResult::new(a.clone(), str.deref().to_string()));
-        // });
 
         // let mut result = Vec::new();
         // let mut checked = false;
@@ -132,8 +78,8 @@ impl Lexer {
     pub fn identifiers(&self) -> Vec<String> {
         let mut identifiers = Vec::new();
         for token in &self.tokens {
-            for identifier in &token.identifiers() {
-                identifiers.push(identifier.deref().to_string());
+            for identifier in token.identifiers().iter() {
+                identifiers.push(identifier.to_string());
             }
         }
         identifiers
@@ -201,15 +147,15 @@ impl Lexer {
         println!("String:\n{}", self.string);
         println!("Identifiers: {:?}", self.identifiers());
         let mut vec = Vec::new();
-        for id in self.interpret_tokens() {
-            vec.push(id.name());
+        for token in self.interpret_tokens() {
+            vec.push(token.name().to_string());
         }
         println!("Interpreted Tokens: {:?}", vec);
-        let mut vec: Vec<String> = Vec::new();
-        for rel in self.interpret_relations_results() {
-            vec.push(rel.relation().name());
-        }
-        println!("Interpreted Relations: {:?}", vec);
+        // let mut vec: Vec<String> = Vec::new();
+        // for rel in self.interpret_relations_results() {
+        //     vec.push(rel.relation().name());
+        // }
+        // println!("Interpreted Relations: {:?}", vec);
     }
 }
 
@@ -217,19 +163,19 @@ pub struct UnknownToken {
     str: String,
 }
 impl TokenTrait for UnknownToken {
-    fn identifiers() -> Vec<String> {
-        Vec::new()
+    fn identifiers() -> Arc<[&'static str]> {
+        Arc::new([])
     }
-    fn name() -> String {
-        "Unknown Token".to_string()
+    fn name() -> &'static str {
+        "Unknown Token"
     }
     fn case_sensetive() -> bool {
         false
     }
-    fn prefix() -> Option<String> {
+    fn prefix() -> Option<&'static str> {
         None
     }
-    fn suffix() -> Option<String> {
+    fn suffix() -> Option<&'static str> {
         None
     }
     fn can_be_filler() -> bool {

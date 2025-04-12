@@ -8,11 +8,11 @@ use super::token_relation::RelationToken;
 
 pub trait TokenTrait {
     // Note: Do not add lifetimes
-    fn identifiers() -> Arc<[String]>;
-    fn name() -> String;
+    fn identifiers() -> Arc<[&'static str]>;
+    fn name() -> &'static str;
     fn check(str: &str) -> bool {
         if Self::case_sensetive() {
-            Self::identifiers().contains(&str.to_string())
+            Self::identifiers().contains(&str)
         } else {
             Self::identifiers()
                 .iter()
@@ -32,8 +32,8 @@ pub trait TokenTrait {
             .build()
     }
     fn can_be_filler() -> bool;
-    fn prefix() -> Option<String>;
-    fn suffix() -> Option<String>;
+    fn prefix() -> Option<&'static str>;
+    fn suffix() -> Option<&'static str>;
     // fn token_result(&self) -> TokenResult {};
     fn as_relation_token() -> RelationToken {
         RelationToken::Normal(Self::as_token())
@@ -45,11 +45,11 @@ pub trait TokenTrait {
 
 #[derive(Clone, Debug, PartialEq, Default)]
 pub struct Token {
-    identifiers: Arc<[String]>,
-    name: String,
+    identifiers: Arc<[&'static str]>,
+    name: &'static str,
     case_sensetive: bool,
-    prefix: Option<String>,
-    suffix: Option<String>,
+    prefix: Option<&'static str>,
+    suffix: Option<&'static str>,
     // token_type: TokenType, // do not put str/input in here, Token is A CELL, not an actuall use struct
 }
 impl Token {
@@ -57,24 +57,24 @@ impl Token {
         self.case_sensetive
     }
 
-    pub fn identifiers(&self) -> Arc<[String]> {
+    pub fn identifiers(&self) -> Arc<[&'static str]> {
         self.identifiers.clone()
     }
 
-    pub fn name(&self) -> String {
-        self.name.clone()
+    pub fn name(&self) -> &str {
+        self.name
     }
 
-    pub fn prefix(&self) -> Option<String> {
-        self.prefix.clone()
+    pub fn prefix(&self) -> Option<&'static str> {
+        self.prefix
     }
 
-    pub fn suffix(&self) -> Option<String> {
-        self.suffix.clone()
+    pub fn suffix(&self) -> Option<&'static str> {
+        self.suffix
     }
     pub fn check(&self, str: &str) -> bool {
         if self.case_sensetive {
-            self.identifiers().contains(&str.to_string())
+            self.identifiers().contains(&str)
         } else {
             self.identifiers()
                 .iter()
@@ -86,7 +86,7 @@ impl Token {
     // fn interpret(&self, underfined_token: UndefinedToken) -> Option<Token> {
     //     self.check(&underfined_token.str).then_some(self.clone())
     // }
-    pub fn new(identifiers: Arc<[String]>, name: String) -> Self {
+    pub fn new(identifiers: Arc<[&'static str]>, name: &'static str) -> Self {
         TokenBuilder::new()
             .identifiers(identifiers)
             .name(name)
@@ -96,7 +96,7 @@ impl Token {
 
 impl std::fmt::Display for Token {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "{}", self.name.clone())
+        write!(f, "{}", self.name)
     }
 }
 #[derive(Debug, Clone)]
@@ -123,15 +123,15 @@ pub struct TokenFillters {
 // experimental
 
 pub struct TokenBuilder {
-    identifiers: Arc<[String]>,
-    name: String,
+    identifiers: Arc<[&'static str]>,
+    name: &'static str,
     case_sensetive: bool,
-    prefix: Option<String>,
-    suffix: Option<String>,
+    prefix: Option<&'static str>,
+    suffix: Option<&'static str>,
     // token_type: TokenType,
 }
 impl TokenBuilder {
-    pub fn identifiers(mut self, identifiers: Arc<[String]>) -> Self {
+    pub fn identifiers(mut self, identifiers: Arc<[&'static str]>) -> Self {
         self.identifiers = identifiers;
         self
     }
@@ -139,7 +139,7 @@ impl TokenBuilder {
     //     self.identifiers.append(&mut identifiers);
     //     self
     // }
-    pub fn name(mut self, name: String) -> Self {
+    pub fn name(mut self, name: &'static str) -> Self {
         self.name = name;
         self
     }
@@ -147,21 +147,21 @@ impl TokenBuilder {
         self.case_sensetive = case_sensetive;
         self
     }
-    pub fn prefix(mut self, prefix: Option<String>) -> Self {
+    pub fn prefix(mut self, prefix: Option<&'static str>) -> Self {
         self.prefix = prefix;
         self
     }
-    pub fn suffix(mut self, suffix: Option<String>) -> Self {
+    pub fn suffix(mut self, suffix: Option<&'static str>) -> Self {
         self.suffix = suffix;
         self
     }
     pub fn build(&self) -> Token {
         Token {
             identifiers: self.identifiers.clone(),
-            name: self.name.clone(),
+            name: self.name,
             case_sensetive: self.case_sensetive,
-            prefix: self.prefix.clone(),
-            suffix: self.suffix.clone(),
+            prefix: self.prefix,
+            suffix: self.suffix,
             // token_type: self.token_type.clone(),
         }
     }
@@ -191,17 +191,5 @@ macro_rules! tokenize {
             .identifiers(vec![name.clone()])
             .case_sensetive(true)
             .build()
-    }};
-}
-
-#[macro_export]
-macro_rules! arc {
-    ($($x:expr),*) => {{
-        let mut vec = Vec::new();
-        $(
-            vec.push($x);
-        )*
-        let vec=vec;
-        std::sync::Arc::new(vec.as_slice())
     }};
 }

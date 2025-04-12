@@ -11,6 +11,7 @@ use res::token_relation::*;
 use tokens::programming::*;
 
 use std::io::{Read, stdin};
+use std::sync::Arc;
 
 fn main() {
     let mut stdin = stdin().lock();
@@ -34,7 +35,7 @@ fn main() {
 
     // lexer.string = "Hello, World. int char bool a cat".to_string();
 
-    let a = Token::new(vec!["a".to_string()], "a".to_string());
+    let a = Token::new(arc!["a"], "a");
 
     lexer.add_token(Type::as_token());
     lexer.add_token(a.clone());
@@ -61,23 +62,23 @@ pub struct Animal {
     given_name: String,
 }
 impl TokenTrait for Animal {
-    fn identifiers() -> Vec<String> {
-        vec!["Cat".to_string()]
+    fn identifiers() -> Arc<[&'static str]> {
+        arc!["Cat"]
     }
 
-    fn name() -> String {
-        "Animal".to_string()
+    fn name() -> &'static str {
+        "Animal"
     }
 
     fn case_sensetive() -> bool {
         true
     }
 
-    fn prefix() -> Option<String> {
+    fn prefix() -> Option<&'static str> {
         None
     }
 
-    fn suffix() -> Option<String> {
+    fn suffix() -> Option<&'static str> {
         None
     }
     // fn care_about_body() -> bool {

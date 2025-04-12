@@ -55,7 +55,7 @@ impl TokenRelation {
         }
     }
     pub fn name(&self) -> &'static str {
-        self.name.clone()
+        self.name
     }
     pub fn relation(&self) -> Arc<[RelationToken]> {
         self.relation.clone()

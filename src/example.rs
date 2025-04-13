@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::{
     arc,
     res::{
-        token::TokenTrait,
+        token::{TokenSettings, TokenTrait},
         token_relation::{RelationToken, TokenRelationTrait},
     },
 };
@@ -21,16 +21,8 @@ impl TokenTrait for Color {
         "Color"
     }
 
-    fn case_sensetive() -> bool {
-        false
-    }
-
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> crate::res::token::TokenSettings {
+        TokenSettings::new()
     }
 }
 struct ColoredThing;

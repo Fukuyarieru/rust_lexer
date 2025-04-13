@@ -55,16 +55,8 @@ impl TokenTrait for EqualiSign {
         "Equal Sign"
     }
 
-    fn case_sensetive() -> bool {
-        false
-    }
-
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> TokenSettings {
+        TokenSettings::new()
     }
 }
 
@@ -77,17 +69,11 @@ impl TokenTrait for Semicolom {
     fn name() -> &'static str {
         "Semicolom"
     }
-
-    fn case_sensetive() -> bool {
-        false
-    }
-
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> TokenSettings {
+        TokenSettings::new()
+            .case_sensetive_set(false)
+            .prefix_set(None)
+            .suffix_set(None)
     }
 }
 pub struct Variable {}
@@ -100,16 +86,8 @@ impl TokenTrait for Variable {
         "Variable"
     }
 
-    fn case_sensetive() -> bool {
-        false
-    }
-
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> TokenSettings {
+        TokenSettings::new()
     }
 }
 pub struct Type {}
@@ -121,13 +99,7 @@ impl TokenTrait for Type {
     fn name() -> &'static str {
         "Type"
     }
-    fn case_sensetive() -> bool {
-        false
-    }
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> TokenSettings {
+        TokenSettings::new()
     }
 }

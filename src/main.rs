@@ -36,7 +36,7 @@ fn main() {
 
     // lexer.string = "Hello, World. int char bool a cat".to_string();
 
-    let a = Token::new(arc!["a"], "a");
+    let a = Token::new(arc!["a"], "a", TokenSettings::new());
 
     lexer.add_token(Type::as_token());
     lexer.add_token(a.clone());
@@ -70,16 +70,7 @@ impl TokenTrait for Animal {
     fn name() -> &'static str {
         "Animal"
     }
-
-    fn case_sensetive() -> bool {
-        true
-    }
-
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> TokenSettings {
+        TokenSettings::new()
     }
 }

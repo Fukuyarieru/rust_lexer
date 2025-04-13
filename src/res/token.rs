@@ -11,15 +11,7 @@ pub trait TokenTrait {
     fn identifiers() -> Arc<[&'static str]>;
     fn name() -> &'static str;
     fn check(str: &str) -> bool {
-        if Self::settings().case_sensetive_get() {
-            Self::identifiers().contains(&str)
-        } else {
-            Self::identifiers()
-                .iter()
-                .map(|f| f.to_lowercase())
-                .collect::<Vec<String>>()
-                .contains(&str.to_lowercase())
-        }
+        Self::as_token().check(str)
     }
     // fn case_sensetive() -> bool;
     fn as_token() -> Token {

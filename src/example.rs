@@ -11,7 +11,10 @@ use crate::{
 pub struct Color;
 impl TokenTrait for Color {
     fn identifiers() -> Arc<[&'static str]> {
-        arc!("")
+        arc!(
+            "Black", "White", "Red", "Blue", "Green", "Pink", "Purple", "Yellow", "Orange",
+            "Brown", "Gray"
+        )
     }
 
     fn name() -> &'static str {

@@ -115,7 +115,8 @@ impl TokenTrait for Variable {
 pub struct Type {}
 impl TokenTrait for Type {
     fn identifiers() -> Arc<[&'static str]> {
-        arc!("char", "int", "bool")
+        // arc!("char", "int", "bool")
+        Arc::from(["char", "int", "bool"])
     }
     fn name() -> &'static str {
         "Type"

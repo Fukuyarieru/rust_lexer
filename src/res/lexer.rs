@@ -170,14 +170,11 @@ impl TokenTrait for UnknownToken {
     fn name() -> &'static str {
         "Unknown Token"
     }
-    fn case_sensetive() -> bool {
-        false
-    }
-    fn prefix() -> Option<&'static str> {
-        None
-    }
-    fn suffix() -> Option<&'static str> {
-        None
+    fn settings() -> TokenSettings {
+        TokenSettings::new()
+            .case_sensetive_set(false)
+            .prefix_set(None)
+            .suffix_set(None)
     }
 }
 impl UnknownToken {

@@ -33,6 +33,9 @@ impl Lexer {
         self.string = str;
         self.interpret_tokens_results()
     }
+    pub fn interpret_potential_tokens(&self) -> Vec<PotentialTokens> {
+        todo!()
+    }
     pub fn interpret_tokens_results(&self) -> Vec<TokenResult> {
         self.tokenize()
             .iter()

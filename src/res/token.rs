@@ -2,7 +2,7 @@
 
 // use crate::FillerToken;
 
-use std::{ops::Deref, sync::Arc};
+use std::sync::Arc;
 
 use super::token_relation::RelationToken;
 
@@ -13,24 +13,13 @@ pub trait TokenTrait {
     fn check(str: &str) -> bool {
         Self::as_token().check(str)
     }
-    // fn case_sensetive() -> bool;
     fn as_token() -> Token {
         Token {
             name: Self::name(),
             identifiers: Self::identifiers(),
             settings: Self::settings(),
         }
-        // TokenBuilder::new()
-        //     .identifiers(Self::identifiers())
-        //     .name(Self::name())
-        //     .case_sensetive(Self::case_sensetive())
-        //     .prefix(Self::prefix())
-        //     .suffix(Self::suffix())
-        //     .build()
     }
-    // fn prefix() -> Option<&'static str>;
-    // fn suffix() -> Option<&'static str>;
-    // fn token_result(&self) -> TokenResult {};
     fn as_relation_token() -> RelationToken {
         RelationToken::Normal(Self::as_token())
     }
@@ -62,13 +51,6 @@ impl Token {
         self.name
     }
 
-    // pub fn prefix(&self) -> Option<&'static str> {
-    //     self.prefix
-    // }
-
-    // pub fn suffix(&self) -> Option<&'static str> {
-    //     self.suffix
-    // }
     pub fn check(&self, str: &str) -> bool {
         if self.settings.case_sensetive_get() {
             self.identifiers().contains(&str)
@@ -80,9 +62,6 @@ impl Token {
                 .contains(&str.to_lowercase())
         }
     }
-    // fn interpret(&self, underfined_token: UndefinedToken) -> Option<Token> {
-    //     self.check(&underfined_token.str).then_some(self.clone())
-    // }
     pub fn new(
         identifiers: Arc<[&'static str]>,
         name: &'static str,

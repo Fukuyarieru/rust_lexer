@@ -16,12 +16,6 @@ pub struct Lexer {
     relations: Vec<TokenRelation>,
 }
 impl Lexer {
-    pub fn tokenize(&self) -> Vec<UndefinedToken> {
-        self.string
-            .split_whitespace()
-            .map(|f| UndefinedToken::new(f.to_string()))
-            .collect()
-    }
     pub fn new() -> Self {
         Self {
             string: "".to_string(),
@@ -29,7 +23,7 @@ impl Lexer {
             relations: Vec::new(),
         }
     }
-    pub fn check(&mut self, str: String) -> Vec<TokenResult> {
+    pub fn interpret(&mut self, str: String) -> Vec<TokenResult> {
         self.string = str;
         self.interpret_tokens_results()
     }
@@ -37,19 +31,16 @@ impl Lexer {
         todo!()
     }
     pub fn interpret_tokens_results(&self) -> Vec<TokenResult> {
-        self.tokenize()
-            .iter()
+        self.string
+            .split_whitespace()
             .map(|undefined_token| {
                 self.tokens()
                     .clone()
                     .iter()
-                    .find(|token| token.check(undefined_token.str()))
-                    .map(|token| TokenResult::new(token.clone(), undefined_token.str().to_string()))
+                    .find(|token| token.check(undefined_token))
+                    .map(|token| TokenResult::new(token.clone(), undefined_token.to_string()))
                     .unwrap_or_else(|| {
-                        TokenResult::new(
-                            UnknownToken::as_token(),
-                            undefined_token.str().to_string(),
-                        )
+                        TokenResult::new(UnknownToken::as_token(), undefined_token.to_string())
                     })
             })
             .collect()

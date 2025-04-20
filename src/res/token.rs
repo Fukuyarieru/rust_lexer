@@ -180,8 +180,8 @@ macro_rules! tokenize {
 pub struct TokenSettings {
     // Settings for Token
     case_sensetive: bool,
-    prefixes: Option<Arc<[&'static str]>>,
-    suffixes: Option<Arc<[&'static str]>>,
+    prefixes: Arc<[&'static str]>,
+    suffixes: Arc<[&'static str]>,
 }
 impl TokenSettings {
     pub fn new() -> Self {

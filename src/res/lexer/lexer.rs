@@ -1,11 +1,14 @@
 #![allow(clippy::collapsible_if)]
-use std::sync::Arc;
+use std::ops::Deref;
 
+#[allow(unused_imports)]
 use crate::arc;
+
 use crate::res::token::*;
 use crate::res::token_relation::*;
 
-use super::undefined_token::UndefinedToken;
+use super::potential_tokens::PotentialTokens;
+use super::unknown_token::UnknownToken;
 
 // To use lexer, either
 // make a struct of your own and implement the TokenTrait, add to lexer with lexer.add_token(YourStruct::as_token())
@@ -28,7 +31,15 @@ impl Lexer {
         self.interpret_tokens_results()
     }
     pub fn interpret_potential_tokens(&self) -> Vec<PotentialTokens> {
-        todo!()
+        self.string.split_whitespace().map(|str|
+            PotentialTokens::new(
+                self
+                    .tokens()
+                    .into_iter()
+                    .filter(|tk| tk.check(str)).collect::<Vec<Token>>(),
+                str.to_string()
+            )
+        ).collect()
     }
     pub fn interpret_tokens_results(&self) -> Vec<TokenResult> {
         self.string
@@ -152,28 +163,4 @@ impl Lexer {
         // }
         // println!("Interpreted Relations: {:?}", vec);
     }
-}
-
-pub struct UnknownToken {
-    str: String,
-}
-impl TokenTrait for UnknownToken {
-    fn identifiers() -> Arc<[&'static str]> {
-        arc!()
-    }
-    fn name() -> &'static str {
-        "Unknown Token"
-    }
-    fn settings() -> TokenSettings {
-        TokenSettings::new()
-            .case_sensetive_set(false)
-            .prefix_set(None)
-            .suffix_set(None)
-    }
-}
-impl UnknownToken {
-    pub fn get_str(&self) -> String {
-        self.str.clone()
-    }
-    // i wish i could make this somehow inherit what it takes (after interpreted) so it would have orginized like prefixes and suffixes
 }

@@ -44,4 +44,7 @@ impl TokenRelationTrait for ColoredThing {
     fn name() -> &'static str {
         "A Colored Thing"
     }
+    fn suffix() -> &'static str {
+        
+    }
 }

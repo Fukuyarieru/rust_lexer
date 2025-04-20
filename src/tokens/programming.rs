@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use crate::arc;
-use crate::res::lexer::*;
 use crate::res::token::*;
 use crate::res::token_relation::*;
 
@@ -14,12 +13,21 @@ impl TokenRelationTrait for VariableDeclaration {
         arc![
             RelationToken::Normal(Type::as_token()),
             // Variable::as_token(),
-            RelationToken::Normal(UnknownToken::as_token()),
+            RelationToken::Advanced {
+                set_amount: Some(1),
+                set_tokens: None
+            },
             RelationToken::Normal(Semicolom::as_token())
         ]
     }
     fn name() -> &'static str {
         "Variable Declaration"
+    }
+    fn prefix() -> Option<&'static str> {
+        Some(";")
+    }
+    fn suffix() -> Option<&'static str> {
+        todo!()
     }
 }
 pub struct VariableModification {}
@@ -79,7 +87,7 @@ impl TokenTrait for Semicolom {
 pub struct Variable {}
 impl TokenTrait for Variable {
     fn identifiers() -> Arc<[&'static str]> {
-        UnknownToken::identifiers() // aaa
+        arc!() // aaa
     }
 
     fn name() -> &'static str {

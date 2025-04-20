@@ -180,8 +180,8 @@ macro_rules! tokenize {
 pub struct TokenSettings {
     // Settings for Token
     case_sensetive: bool,
-    prefix: Option<&'static str>,
-    suffix: Option<&'static str>,
+    prefixes: Option<Arc<[&'static str]>>,
+    suffixes: Option<Arc<[&'static str]>>,
 }
 impl TokenSettings {
     pub fn new() -> Self {
@@ -194,18 +194,18 @@ impl TokenSettings {
         self.case_sensetive = b;
         self
     }
-    pub fn prefix_get(&self) -> Option<&'static str> {
-        self.prefix
+    pub fn prefix_get(&self) -> Option<Arc<[&'static str]>> {
+        self.prefixes.clone()
     }
-    pub fn prefix_set(mut self, p: Option<&'static str>) -> Self {
-        self.prefix = p;
+    pub fn prefix_set(mut self, p: Option<Arc<[&'static str]>>) -> Self {
+        self.prefixes = p;
         self
     }
-    pub fn suffix_get(&self) -> Option<&'static str> {
-        self.suffix
+    pub fn suffix_get(&self) -> Option<Arc<[&'static str]>> {
+        self.suffixes.clone()
     }
-    pub fn suffix_set(mut self, s: Option<&'static str>) -> Self {
-        self.suffix = s;
+    pub fn suffix_set(mut self, s: Option<Arc<[&'static str]>>) -> Self {
+        self.suffixes = s;
         self
     }
 }
@@ -214,20 +214,9 @@ impl Default for TokenSettings {
     fn default() -> Self {
         Self {
             case_sensetive: true,
-            prefix: None,
-            suffix: None,
+            prefixes: None,
+            suffixes: None,
         }
     }
 }
-pub struct PotentialTokens {
-    // In the case where more than one token contains matching identifiers, PotenialTokens could represent them unified together and used for diffitiriation
-    tokens: Vec<Token>,
-}
-impl PotentialTokens {
-    pub fn new(tokens: Vec<Token>) -> Self {
-        Self { tokens }
-    }
-    pub fn tokens(&self) -> Vec<Token> {
-        self.tokens.clone()
-    }
-}
+

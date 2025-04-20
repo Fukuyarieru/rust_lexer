@@ -39,6 +39,8 @@ pub trait TokenRelationTrait {
     fn add_tokens_automatically_to_lexer() -> bool {
         true
     }
+    fn prefixes() -> Option<Arc<[&'static str]>>;
+    fn suffix() -> Option<Arc<[&'static str]>>;
 }
 #[derive(Clone, Debug)]
 pub struct TokenRelation {

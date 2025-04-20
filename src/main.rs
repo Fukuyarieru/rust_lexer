@@ -5,7 +5,7 @@ mod example;
 mod res;
 mod tokens;
 
-use res::lexer::*;
+use res::lexer::lexer::Lexer;
 use res::token::*;
 use res::token_relation::*;
 

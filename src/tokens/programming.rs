@@ -22,11 +22,14 @@ impl TokenRelationTrait for VariableDeclaration {
     }
     fn name() -> &'static str {
         "Variable Declaration"
-    }    
-    fn prefixes() -> Option<Arc<[&'static str]>> {
+    }
+    fn prefixes() -> Arc<[&'static str]> {
         todo!()
     }
-    fn suffixes() -> Option<Arc<[&'static str]>> {
+    fn suffixes() -> Arc<[&'static str]> {
+        todo!()
+    }
+    fn settings() -> TokenRelationSettings {
         todo!()
     }
 }
@@ -51,6 +54,15 @@ impl TokenRelationTrait for VariableModification {
                 set_tokens: None
             }
         )
+    }
+    fn settings() -> TokenRelationSettings {
+        todo!()
+    }
+    fn prefixes() -> Arc<[&'static str]> {
+        todo!()
+    }
+    fn suffixes() -> Arc<[&'static str]> {
+        todo!()
     }
 }
 pub struct EqualiSign {}
@@ -80,8 +92,8 @@ impl TokenTrait for Semicolom {
     fn settings() -> TokenSettings {
         TokenSettings::new()
             .case_sensetive_set(false)
-            .prefixes_set(None)
-            .suffixes_set(None)
+            .prefixes_set(arc!())
+            .suffixes_set(arc!())
     }
 }
 pub struct Variable {}

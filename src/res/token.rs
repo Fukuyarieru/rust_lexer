@@ -4,6 +4,8 @@
 
 use std::sync::Arc;
 
+use crate::arc;
+
 use super::token_relation::RelationToken;
 
 pub trait TokenTrait {
@@ -194,17 +196,17 @@ impl TokenSettings {
         self.case_sensetive = b;
         self
     }
-    pub fn prefix_get(&self) -> Option<Arc<[&'static str]>> {
+    pub fn prefix_get(&self) -> Arc<[&'static str]> {
         self.prefixes.clone()
     }
-    pub fn prefix_set(mut self, p: Option<Arc<[&'static str]>>) -> Self {
+    pub fn prefixes_set(mut self, p: Arc<[&'static str]>) -> Self {
         self.prefixes = p;
         self
     }
-    pub fn suffix_get(&self) -> Option<Arc<[&'static str]>> {
+    pub fn suffix_get(&self) -> Arc<[&'static str]> {
         self.suffixes.clone()
     }
-    pub fn suffix_set(mut self, s: Option<Arc<[&'static str]>>) -> Self {
+    pub fn suffixes_set(mut self, s: Arc<[&'static str]>) -> Self {
         self.suffixes = s;
         self
     }
@@ -214,8 +216,8 @@ impl Default for TokenSettings {
     fn default() -> Self {
         Self {
             case_sensetive: true,
-            prefixes: None,
-            suffixes: None,
+            prefixes: arc!(),
+            suffixes: arc!(),
         }
     }
 }

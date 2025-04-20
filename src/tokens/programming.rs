@@ -22,11 +22,11 @@ impl TokenRelationTrait for VariableDeclaration {
     }
     fn name() -> &'static str {
         "Variable Declaration"
+    }    
+    fn prefixes() -> Option<Arc<[&'static str]>> {
+        todo!()
     }
-    fn prefix() -> Option<&'static str> {
-        Some(";")
-    }
-    fn suffix() -> Option<&'static str> {
+    fn suffixes() -> Option<Arc<[&'static str]>> {
         todo!()
     }
 }
@@ -80,8 +80,8 @@ impl TokenTrait for Semicolom {
     fn settings() -> TokenSettings {
         TokenSettings::new()
             .case_sensetive_set(false)
-            .prefix_set(None)
-            .suffix_set(None)
+            .prefixes_set(None)
+            .suffixes_set(None)
     }
 }
 pub struct Variable {}

@@ -18,8 +18,8 @@ impl TokenTrait for UnknownToken {
     fn settings() -> TokenSettings {
         TokenSettings::new()
             .case_sensetive_set(false)
-            .prefix_set(None)
-            .suffix_set(None)
+            .prefixes_set(arc!())
+            .suffixes_set(arc!())
     }
 }
 impl UnknownToken {

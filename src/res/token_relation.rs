@@ -6,9 +6,10 @@ use crate::res::token::*;
 pub trait TokenRelationTrait {
     // Note: Do not add lifetimes
     fn as_relation() -> TokenRelation {
-        TokenRelation::new(Self::relation(), Self::ordered(), Self::name())
+        TokenRelation::new(Self::relation(), Self::settings(), Self::name())
     }
-    fn ordered() -> bool;
+    fn ordered()->bool {Self::settings().ordered}
+    fn settings() -> TokenRelationSettings;
     fn relation() -> Arc<[RelationToken]>;
     fn name() -> &'static str;
     fn check(tokens: &[Token]) -> bool {
@@ -39,20 +40,20 @@ pub trait TokenRelationTrait {
     fn add_tokens_automatically_to_lexer() -> bool {
         true
     }
-    fn prefixes() -> Option<Arc<[&'static str]>>;
-    fn suffix() -> Option<Arc<[&'static str]>>;
+    fn prefixes() -> Arc<[&'static str]>;
+    fn suffixes() -> Arc<[&'static str]>;
 }
 #[derive(Clone, Debug)]
 pub struct TokenRelation {
     relation: Arc<[RelationToken]>,
-    ordered: bool,
+    settings: TokenRelationSettings,
     name: &'static str,
 }
 impl TokenRelation {
-    pub fn new(tokens: Arc<[RelationToken]>, ordered: bool, name: &'static str) -> Self {
+    pub fn new(tokens: Arc<[RelationToken]>, settings: TokenRelationSettings, name: &'static str) -> Self {
         Self {
             relation: tokens,
-            ordered,
+            settings,
             name,
         }
     }
@@ -63,13 +64,13 @@ impl TokenRelation {
         self.relation.clone()
     }
     pub fn ordered(&self) -> bool {
-        self.ordered
+        self.settings.ordered.clone()
     }
     pub fn check(&self, tokens: &[Token]) -> bool {
         if tokens.len() != self.relation.len() {
             return false;
         }
-        if self.ordered {
+        if self.ordered() {
             for (i, r) in self.relation().iter().enumerate() {
                 r.check_token(&tokens[i]).not().then_some(false);
             }
@@ -137,4 +138,10 @@ impl RelationToken {
     pub fn check_tokens(&self, tokens: &[Token]) -> bool {
         tokens.iter().any(|t| self.check_token(t))
     }
+}
+#[derive(Clone,Debug)]
+pub struct TokenRelationSettings {
+    ordered: bool,
+    suffixes: Arc<[&'static str]>,
+    prefixes: Arc<[&'static str]>
 }

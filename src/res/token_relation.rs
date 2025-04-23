@@ -1,14 +1,18 @@
-use std::{ops::Not, sync::Arc};
+use std::{ ops::{ Deref, Index, Not }, sync::Arc };
 
 // use crate::res::lexer::*;
 use crate::res::token::*;
-// TODO, REDO
+
+use super::lexer::potential_tokens::PotentialTokens;
+
 pub trait TokenRelationTrait {
     // Note: Do not add lifetimes
     fn as_relation() -> TokenRelation {
         TokenRelation::new(Self::relation(), Self::settings(), Self::name())
     }
-    fn ordered()->bool {Self::settings().ordered}
+    fn ordered() -> bool {
+        Self::settings().ordered
+    }
     fn settings() -> TokenRelationSettings;
     fn relation() -> Arc<[RelationToken]>;
     fn name() -> &'static str;
@@ -36,12 +40,39 @@ pub trait TokenRelationTrait {
             true
         }
     }
+    fn check_ordered();
+    fn check_potential(tokens: &[PotentialTokens]) -> bool {
+        if Self::relation().len().eq(&tokens.len()).not() {
+            return false;
+        }
+        if Self::ordered() {
+            for (i, t) in Self::relation().iter().enumerate() {
+                t.check_tokens(&tokens[i].tokens())
+                    .not()
+                    .then(|| {
+                        return false;
+                    });
+            }
+            return true;
+        } else {
+            let mut tokens = tokens.deref().clone();
+            for rel in Self::relation().iter() {
+                let a = tokens.iter().position(|f| rel.check_tokens(f.tokens()));
+                a.is_some
+            }
+        }
+        return true;
+    }
     // maybe
     fn add_tokens_automatically_to_lexer() -> bool {
         true
     }
-    fn prefixes() -> Arc<[&'static str]>;
-    fn suffixes() -> Arc<[&'static str]>;
+    fn prefixes() -> Arc<[&'static str]> {
+        Self::settings().prefixes.clone()
+    }
+    fn suffixes() -> Arc<[&'static str]> {
+        Self::settings().suffixes.clone()
+    }
 }
 #[derive(Clone, Debug)]
 pub struct TokenRelation {
@@ -50,7 +81,11 @@ pub struct TokenRelation {
     name: &'static str,
 }
 impl TokenRelation {
-    pub fn new(tokens: Arc<[RelationToken]>, settings: TokenRelationSettings, name: &'static str) -> Self {
+    pub fn new(
+        tokens: Arc<[RelationToken]>,
+        settings: TokenRelationSettings,
+        name: &'static str
+    ) -> Self {
         Self {
             relation: tokens,
             settings,
@@ -80,10 +115,7 @@ impl TokenRelation {
             // let mut check_copy = self.relation.clone();
 
             for relation_token in &self.relation.to_vec() {
-                if let Some(index) = tokens_copy
-                    .iter()
-                    .position(|t| relation_token.check_token(t))
-                {
+                if let Some(index) = tokens_copy.iter().position(|t| relation_token.check_token(t)) {
                     tokens_copy.remove(index);
                 } else {
                     return false;
@@ -94,6 +126,7 @@ impl TokenRelation {
         }
     }
 }
+#[derive(Debug)]
 pub struct TokenRelationResult {
     relation: TokenRelation,
     str: String,
@@ -123,14 +156,14 @@ impl RelationToken {
     pub fn check_token(&self, token: &Token) -> bool {
         match self {
             Self::Normal(t) => t.eq(token),
-            Self::Advanced {
-                set_amount,
-                set_tokens,
-            } => {
+            Self::Advanced { set_amount, set_tokens } => {
                 let a = 3;
-                set_tokens
-                    .as_ref()
-                    .and_then(|vec| vec.iter().any(|t| t.eq(token)).then_some(true));
+                set_tokens.as_ref().and_then(|vec|
+                    vec
+                        .iter()
+                        .any(|t| t.eq(token))
+                        .then_some(true)
+                );
                 false
             }
         }
@@ -139,9 +172,9 @@ impl RelationToken {
         tokens.iter().any(|t| self.check_token(t))
     }
 }
-#[derive(Clone,Debug)]
+#[derive(Clone, Debug)]
 pub struct TokenRelationSettings {
-    ordered: bool,
-    suffixes: Arc<[&'static str]>,
-    prefixes: Arc<[&'static str]>
+    pub ordered: bool,
+    pub suffixes: Arc<[&'static str]>,
+    pub prefixes: Arc<[&'static str]>,
 }

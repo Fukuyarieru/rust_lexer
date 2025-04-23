@@ -152,11 +152,9 @@ impl Lexer {
         println!("===== Printing Lexer Detail =====");
         println!("String:\n{}", self.string);
         println!("Identifiers: {:?}", self.identifiers());
-        let mut vec = Vec::new();
-        for token in self.interpret_tokens() {
-            vec.push(token.name().to_string());
-        }
-        println!("Interpreted Tokens: {:?}", vec);
+        print!("Interpreted Tokens: {}",self.interpret_tokens_results().iter().map(|tkr|tkr.token().name().to_string()+&tkr.str()).collect::<Vec<String>>());
+        println!("Interpreted Relations: ");
+        self.interpret_relations_results().iter().for_each(|r|println!("{} {:?}",r.relation().name(),r.str()));
         // let mut vec: Vec<String> = Vec::new();
         // for rel in self.interpret_relations_results() {
         //     vec.push(rel.relation().name());

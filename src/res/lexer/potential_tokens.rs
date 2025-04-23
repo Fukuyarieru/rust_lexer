@@ -9,8 +9,8 @@ impl PotentialTokens {
     pub fn new(tokens: Vec<Token>, str: String) -> Self {
         Self { tokens ,str}
     }
-    pub fn tokens(&self) -> Vec<Token> {
-        self.tokens.clone()
+    pub fn tokens(&self) -> &[Token] {
+        self.tokens.as_slice()
     }
     pub fn add(&mut self, token_result: Token) {
         self.tokens.push(token_result);

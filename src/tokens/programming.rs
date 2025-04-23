@@ -15,7 +15,7 @@ impl TokenRelationTrait for VariableDeclaration {
             // Variable::as_token(),
             RelationToken::Advanced {
                 set_amount: Some(1),
-                set_tokens: None
+                set_tokens: None,
             },
             RelationToken::Normal(Semicolom::as_token())
         ]
@@ -23,14 +23,12 @@ impl TokenRelationTrait for VariableDeclaration {
     fn name() -> &'static str {
         "Variable Declaration"
     }
-    fn prefixes() -> Arc<[&'static str]> {
-        todo!()
-    }
-    fn suffixes() -> Arc<[&'static str]> {
-        todo!()
-    }
     fn settings() -> TokenRelationSettings {
-        todo!()
+        TokenRelationSettings {
+            ordered: true,
+            suffixes: arc!("!"),
+            prefixes: arc!(),
+        }
     }
 }
 pub struct VariableModification {}
@@ -46,23 +44,21 @@ impl TokenRelationTrait for VariableModification {
             // RelationToken::Normal(UnknownToken::as_token()),
             RelationToken::Advanced {
                 set_amount: Some(1),
-                set_tokens: None
+                set_tokens: None,
             },
             RelationToken::Normal(EqualiSign::as_token()),
             RelationToken::Advanced {
                 set_amount: Some(1),
-                set_tokens: None
+                set_tokens: None,
             }
         )
     }
     fn settings() -> TokenRelationSettings {
-        todo!()
-    }
-    fn prefixes() -> Arc<[&'static str]> {
-        todo!()
-    }
-    fn suffixes() -> Arc<[&'static str]> {
-        todo!()
+        TokenRelationSettings {
+            ordered: true,
+            suffixes: arc!(";"),
+            prefixes: arc!(),
+        }
     }
 }
 pub struct EqualiSign {}

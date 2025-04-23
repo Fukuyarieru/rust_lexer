@@ -1,4 +1,5 @@
 #![allow(clippy::collapsible_if)]
+#![allow(unused_imports)]
 use std::ops::Deref;
 
 #[allow(unused_imports)]

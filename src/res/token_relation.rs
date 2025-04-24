@@ -16,32 +16,32 @@ pub trait TokenRelationTrait {
     fn settings() -> TokenRelationSettings;
     fn relation() -> Arc<[RelationToken]>;
     fn name() -> &'static str;
-    fn check(tokens: &[Token]) -> bool {
+    fn check_tokens_ordered(tokens: &[Token]) -> bool {
+        for (i, rel_tok) in Self::relation().iter().enumerate() {
+            rel_tok.check_token(&tokens[i]).not().then_some(false);
+        }
+        true
+    }
+    fn check_tokens(tokens: &[Token]) -> bool {
         if tokens.len() != Self::relation().len() {
             return false;
         }
-        let checks = Self::relation();
         if Self::ordered() {
-            for (i, rel_tok) in checks.iter().enumerate() {
-                rel_tok.check_token(&tokens[i]).not().then_some(false);
-            }
-            true
+            Self::check_tokens_ordered(tokens)
         } else {
             let mut tokens_copy = tokens.to_vec();
-            for rel_tok in checks.iter() {
+            for rel_tok in Self::relation().iter() {
                 if let Some(index) = tokens_copy.iter().position(|t| rel_tok.check_token(t)) {
                     tokens_copy.remove(index);
                 } else {
                     return false;
                 }
             }
-
-            // tokens_copy.is_empty() // :\??
             true
         }
     }
     fn check_ordered();
-    fn check_potential(tokens: &[PotentialTokens]) -> bool {
+    fn check_potential_tokens(tokens: &[PotentialTokens]) -> bool {
         if Self::relation().len().eq(&tokens.len()).not() {
             return false;
         }
@@ -58,7 +58,7 @@ pub trait TokenRelationTrait {
             let mut tokens = tokens.deref().clone();
             for rel in Self::relation().iter() {
                 let a = tokens.iter().position(|f| rel.check_tokens(f.tokens()));
-                a.is_some
+                a.is_some;
             }
         }
         return true;
